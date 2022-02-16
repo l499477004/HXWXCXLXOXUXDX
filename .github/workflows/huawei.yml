@@ -1,0 +1,31 @@
+name: HuaWei
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "10 0-23/8 * * *"
+    watch:
+        types: [started]
+
+env:
+  DING_TOKEN: ${{ secrets.DING_TOKEN }}
+  DING_SECRET: ${{ secrets.DING_SECRET }}
+  PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+  SERVER_IP: ${{ secrets.SERVER_IP }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.6'
+
+    - name: requirements
+      run: |
+        pip3 install -r requirements.txt
+    - name: Run
+      run: |
+        python3 main.py --client huawei --username ${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }}
